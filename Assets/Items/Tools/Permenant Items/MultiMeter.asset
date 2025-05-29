@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb07f0fa45fca4b688f318fa02fc6c11, type: 3}
+  m_Name: MultiMeter
+  m_EditorClassIdentifier: 
+  itemName: Multi-Meter
+  prefab: {fileID: 8899289919103867303, guid: f560d4cc0afeb49f3b70ea76abd440b6, type: 3}
+  icon: {fileID: 0}
+  description: Experimental DOE equiptment allowing the measurement of radiation,
+    electromagnetic fields, and an unknown experiemental source.
+  pickUpQuantity: 1
+  isStackable: 0
+  isHandheld: 1
+  isPermanent: 1
+  maxDurability: -1
+  usageRate: 0

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb07f0fa45fca4b688f318fa02fc6c11, type: 3}
+  m_Name: Buckshot
+  m_EditorClassIdentifier: 
+  itemName: Buckshot
+  prefab: {fileID: 941288409035864962, guid: 8508afe4a6d8944f1abfcd69336229d7, type: 3}
+  icon: {fileID: 0}
+  description: 2 buckshot shells
+  pickUpQuantity: 2
+  isStackable: 1
+  isHandheld: 0
+  isPermanent: 0
+  maxDurability: 0
+  usageRate: 0
