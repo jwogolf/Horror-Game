@@ -40,16 +40,28 @@ public class TimeManager : MonoBehaviour
     { get { return minute; } set { minute = value; OnMinuteChange(value); } }
 
     public int hour;
-    public int Hours 
-    { get { return hour; } set { hour = value; OnHourChange(value); } }
+    public int Hours
+    {
+        get { return hour; }
+        set
+        {
+            hour = value;
+            if (!suppressHourTransition)
+                OnHourChange(value);
+        }
+    }
 
     public int day;
     public int Days 
     { get { return day; } set { day = value; OnDayChange(value); } }
 
+    private Quaternion defaultSunRotation;
     // Time when sun is in default position
     private int stdSunPosHour = 11;
     private int stdSunPosMinute = 0;
+
+    // for loading time
+    public bool suppressHourTransition = false;
 
     private float tempSeconds;
 
@@ -57,6 +69,8 @@ public class TimeManager : MonoBehaviour
     void Start()
     {
         RenderSettings.sun = mainLight;
+
+        defaultSunRotation = mainLight.transform.rotation;
 
         minute = 50;
         hour = 7;
@@ -150,7 +164,13 @@ public class TimeManager : MonoBehaviour
     public void updateSky(int hour, int minute) {
         int minuteDiff = ((hour - stdSunPosHour) * 60) + (minute - stdSunPosMinute);
 
-        mainLight.transform.Rotate(Vector3.forward, (1f / 1440f) * 360f * minuteDiff, Space.World);
+        mainLight.transform.rotation = defaultSunRotation;
+
+        float minutesPerDay = 1440f;
+        float anglePerMinute = 360f / minutesPerDay;
+        float rotationAmount = minuteDiff * anglePerMinute;
+
+        mainLight.transform.Rotate(Vector3.forward, rotationAmount, Space.World);
 
         // night
         if (hour < dawnStart || hour > nightStart) {
@@ -163,7 +183,9 @@ public class TimeManager : MonoBehaviour
             mainLight.color = nightDawn.Evaluate(0f);
             RenderSettings.ambientIntensity = nightAmbient;
         }
-        else if (hour < dayStart) {
+        // dawn
+        else if (hour < dayStart)
+        {
             RenderSettings.skybox.SetTexture("_Texture1", dawnSkybox);
             RenderSettings.skybox.SetTexture("_Texture2", daySkybox);
             RenderSettings.skybox.SetFloat("_Blend", 0);
@@ -173,7 +195,9 @@ public class TimeManager : MonoBehaviour
             mainLight.color = dawnDay.Evaluate(0f);
             RenderSettings.ambientIntensity = dawnAmbient;
         }
-        else if (hour < duskStart) {
+        // day
+        else if (hour < duskStart)
+        {
             RenderSettings.skybox.SetTexture("_Texture1", daySkybox);
             RenderSettings.skybox.SetTexture("_Texture2", duskSkybox);
             RenderSettings.skybox.SetFloat("_Blend", 0);
@@ -183,7 +207,9 @@ public class TimeManager : MonoBehaviour
             mainLight.color = dayDusk.Evaluate(0f);
             RenderSettings.ambientIntensity = dayAmbient;
         }
-        else if (hour < nightStart) {
+        // dusk
+        else if (hour < nightStart)
+        {
             RenderSettings.skybox.SetTexture("_Texture1", duskSkybox);
             RenderSettings.skybox.SetTexture("_Texture2", nightSkybox);
             RenderSettings.skybox.SetFloat("_Blend", 0);

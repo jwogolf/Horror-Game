@@ -13,6 +13,8 @@ public class InventorySystem : MonoBehaviour
     public List<ItemInstance> items = new List<ItemInstance>();
     public int maxInventorySize = 10;
 
+    public List<string> abilities = new List<string>();
+
     // Controls
     [SerializeField] private InputActionAsset inputActionsAsset;
     private InputAction upAction;
@@ -24,15 +26,9 @@ public class InventorySystem : MonoBehaviour
     private InputAction openAction;
     //private bool holding = false; // holding button
 
-    [Header("Permanent Items")]
-    [SerializeField] public ItemData knifeData;
-    [SerializeField] public ItemData revolverData;
-    [SerializeField] public ItemData revolverAmmo;
+    // permanent items
+    private string[] permaItems = { "Knife", "Revolver", "Lighter", "Multi-Meter" };
     private int startingRevolverRounds = 24;
-    [SerializeField] public ItemData lighterData;
-    [SerializeField] public ItemData multiMeterData;
-
-    private List<string> abilities = new List<string>();
 
     void OnEnable()
     {
@@ -59,29 +55,32 @@ public class InventorySystem : MonoBehaviour
 
     void Awake()
     {
-        // add items that were in inventory on last save
-        // DONT NEED TO IMPLEMENT UNTIL ADDING SAVE FUNCTIONALITY
+        // Add permenant items
+        foreach (string item in permaItems)
+        {
+            AddItemByString(item);
+        }
 
-        // if no save file add permenant items
-        if (knifeData != null) AddItem(knifeData, knifeData.pickUpQuantity);
-        if (revolverData != null) AddItem(revolverData, revolverData.pickUpQuantity);
-        if (revolverAmmo != null) AddItem(revolverAmmo, startingRevolverRounds);
-        if (lighterData != null) AddItem(lighterData, lighterData.pickUpQuantity);
-        if (multiMeterData != null) AddItem(multiMeterData, multiMeterData.pickUpQuantity);
+        // add revolver ammo
+        AddItemWithState("Revolver Ammo", startingRevolverRounds, 0f);
     }
 
     void Update()
     {
         // Handle opening inventory and navigation once inventory is open
-        if (openAction.WasPressedThisFrame()) {
-            ui.ToggleUI();
-        }
+            if (openAction.WasPressedThisFrame())
+            {
+                ui.ToggleUI();
+            }
 
-        if (ui.IsOpen()) {
-            if (upAction.WasPressedThisFrame()) {
+        if (ui.IsOpen())
+        {
+            if (upAction.WasPressedThisFrame())
+            {
                 ui.setIndex(-1);
             }
-            if (downAction.WasPressedThisFrame()) {
+            if (downAction.WasPressedThisFrame())
+            {
                 ui.setIndex(1);
             }
 
@@ -127,6 +126,19 @@ public class InventorySystem : MonoBehaviour
         newItem.currentDurability = durability;
         if (ammo != null) newItem.loadedAmmoTypes = ammo;
         items.Add(newItem);
+        ui.UpdateUI();
+    }
+
+    public void AddItemByString(string itemName)
+    {
+        ItemInstance newItem = new ItemInstance(itemName);
+        items.Add(newItem);
+        ui.UpdateUI();
+    }
+
+    public void clearItems()
+    {
+        items.Clear();
         ui.UpdateUI();
     }
 
@@ -206,24 +218,5 @@ public class InventorySystem : MonoBehaviour
     public List<string> getAbilities()
     {
         return abilities;
-    }
-
-    public string ToSaveString()
-    {
-        StringBuilder saveData = new StringBuilder();
-
-        saveData.AppendLine($"Items:");
-        foreach (var item in items)
-        {
-            saveData.AppendLine($"Item:\n{item.ToSaveString()}");
-        }
-
-        saveData.AppendLine($"Abilities:");
-        foreach (var ability in abilities)
-        {
-            saveData.AppendLine($"Ability:\n{ability}");
-        }
-
-        return saveData.ToString();
     }
 }

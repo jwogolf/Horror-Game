@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UnityEngine;
+using System.Linq;
 
 [System.Serializable]
 public class PuzzleData
@@ -9,19 +11,10 @@ public class PuzzleData
     public List<PuzzleRequirement> requirements;
     public bool isCompleted = false;
 
-    public string ToSaveString()
+    public PuzzleData(string name, List<PuzzleRequirement> reqs, bool complete)
     {
-        StringBuilder saveData = new StringBuilder();
-
-        saveData.AppendLine($"Puzzle ID:{id}");
-        saveData.AppendLine($"Is Completed:{isCompleted}");
-
-        saveData.AppendLine($"Requirements:");
-        foreach (var req in requirements)
-        {
-            saveData.AppendLine($"Puzzle Requirement:\n{req.ToSaveString()}");
-        }
-
-        return saveData.ToString();
+        this.id = name;
+        this.requirements = reqs;
+        this.isCompleted = complete;
     }
 }

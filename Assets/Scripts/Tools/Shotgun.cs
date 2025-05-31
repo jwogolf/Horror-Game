@@ -125,7 +125,7 @@ public class Shotgun : MonoBehaviour, ToolBehavior
 
         if (!instance.IsBroken())
         {
-            if (instance.loadedAmmoTypes[0] != null) activeChamber = 0;
+            if (instance.loadedAmmoTypes[0] != null && instance.loadedAmmoTypes[0] != "") activeChamber = 0;
             else activeChamber = 1;
 
             Fire(ParseAmmoType(instance.loadedAmmoTypes[activeChamber]));

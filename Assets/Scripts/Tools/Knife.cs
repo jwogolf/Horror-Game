@@ -4,7 +4,7 @@ public class Knife : MonoBehaviour, ToolBehavior
 {
     [SerializeField] private LayerMask hitMask; // can probably remove unless only want to hit certain layers
 
-    private float attackCooldown = 0.75f;
+    private float attackCooldown = 0.75f; // time between attacks
     private float damageAmount = 75f;
     private float attackRange = 1.0f;
     private float attackRadius = 0.5f;

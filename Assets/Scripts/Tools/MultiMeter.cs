@@ -30,6 +30,7 @@ public class MultiMeter : MonoBehaviour
     private float deliriumAddRate = 1.0f;
 
     // Location
+    // coordinated of (0,0,0) in game
     // Centered around central Appalachia
     private readonly float baseLatitude = 37.5f;
     private readonly float baseLongitude = -81.5f;
@@ -42,7 +43,7 @@ public class MultiMeter : MonoBehaviour
     private float coordFuzz = 0.0005f;
     private string displayCoords;
 
-
+    // Levels
     private float radiationLevel;
     private float emfLevel;
     private float experimentalLevel;

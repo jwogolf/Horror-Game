@@ -13,6 +13,8 @@ public class PuzzleManager : MonoBehaviour
 
     public static PuzzleManager Instance { get; private set; }
 
+    // these are public just so they can be seen in the inspector for testing
+    // change to private before release
     [Header("Puzzles and Arcs")]
     public List<PuzzleData> allPuzzles = new List<PuzzleData>();
     public List<PuzzleArc> allArcs = new List<PuzzleArc>();
@@ -47,7 +49,11 @@ public class PuzzleManager : MonoBehaviour
 
     public void MarkPuzzleComplete(string id)
     {
-        if (!puzzleLookup.ContainsKey(id)) return;
+        if (!puzzleLookup.ContainsKey(id))
+        {
+            Debug.Log("MISSING PUZZLE, NO MATCHING ID");
+            return;
+        }
 
         var puzzle = puzzleLookup[id];
         if (puzzle.isCompleted) return;
@@ -76,6 +82,22 @@ public class PuzzleManager : MonoBehaviour
         return arcLookup.TryGetValue(id, out var arc) ? arc : null;
     }
 
+    public void setPuzzles(List<PuzzleData> data)
+    {
+        allPuzzles = data;
+
+        foreach (var puzzle in allPuzzles)
+            puzzleLookup[puzzle.id] = puzzle;
+    }
+
+    public void setArcs(List<PuzzleArc> data)
+    {
+        allArcs = data;
+
+        foreach (var arc in allArcs)
+            arcLookup[arc.arcID] = arc;
+    }
+
     // Optional: get list of puzzles/arcs ready to begin
     public List<PuzzleData> GetAvailablePuzzles()
     {
@@ -91,27 +113,6 @@ public class PuzzleManager : MonoBehaviour
     {
         return allArcs;
     }
-
-    public string ToSaveString()
-    {
-        StringBuilder saveData = new StringBuilder();
-
-        saveData.AppendLine($"Arcs:");
-        foreach (var arc in allArcs)
-        {
-            saveData.AppendLine($"Arc:\n{arc.ToSaveString()}");
-        }
-
-        saveData.AppendLine($"Puzzles:");
-        foreach (var puzzle in allPuzzles)
-        {
-            saveData.AppendLine($"Puzzle:\n{puzzle.ToSaveString()}");
-        }
-
-        return saveData.ToString();
-    }
-
-
 
     // TEST
 
@@ -142,16 +143,18 @@ public class PuzzleManager : MonoBehaviour
         {
             if (puzzle.isCompleted) continue;
 
-            bool allRequirementsMet = true; //puzzle.requirements.All(EvaluateRequirement);
+            bool allRequirementsMet = true;
 
             foreach (var req in puzzle.requirements)
             {
-                if (!EvaluateRequirement(req)) {
-                    allRequirementsMet = false;
+                if (EvaluateRequirement(req))
+                {
+                    req.requirementSatisfied = true;
                 }
                 else
                 {
-                    req.requirementSatisfied = true;
+                    allRequirementsMet = false;
+                    break;
                 }
             }
 
@@ -164,32 +167,20 @@ public class PuzzleManager : MonoBehaviour
 
     void Start()
     {
-        AddTestPuzzle();
+        //AddTestPuzzle();
     }
 
 
     void AddTestPuzzle()
     {
-        PuzzleData testPuzzle = new PuzzleData
-        {
-            id = "Test_Puzzle_001",
-            isCompleted = false,
-            requirements = new List<PuzzleRequirement>
-            {
-                new PuzzleRequirement
-                {
-                    type = PuzzleRequirementType.Location,
-                    targetLocation = new Vector3(0f, 0f, 0f),
-                    radius = 20f,
-                    oneTimeRequirement = true
-                },
-                new PuzzleRequirement
-                {
-                    type = PuzzleRequirementType.MultimeterMode,
-                    requiredScanMode = MultiMeter.ScanMode.Radiation
-                }
-            }
-        };
+        string id = "Test_Puzzle_001";
+        bool isCompleted = false;
+
+        List<PuzzleRequirement> requirements = new List<PuzzleRequirement>();
+        requirements.Add(new PuzzleRequirement(t: PuzzleRequirementType.Location, location: new Vector3(0f, 0f, 0f), oneTime: false));
+        requirements.Add(new PuzzleRequirement(t: PuzzleRequirementType.MultimeterMode, mode: MultiMeter.ScanMode.Radiation));
+
+        PuzzleData testPuzzle = new PuzzleData(id, requirements, isCompleted);
 
         allPuzzles.Add(testPuzzle);
         puzzleLookup[testPuzzle.id] = testPuzzle;

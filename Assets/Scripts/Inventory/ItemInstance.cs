@@ -4,12 +4,13 @@ using System.IO;
 using System.Text;
 using System.Linq;
 
+[System.Serializable]
 public class ItemInstance
 {
     public ItemData data;
     public float currentDurability;
     public int quantity;
-    public string[] loadedAmmoTypes = {null, null};
+    public string[] loadedAmmoTypes = { null, null };
 
     public ItemInstance(ItemData data)
     {
@@ -72,17 +73,4 @@ public class ItemInstance
     {
         quantity -= used;
     }
-
-    public string ToSaveString()
-    {
-        StringBuilder saveData = new StringBuilder();
-
-        saveData.AppendLine($"Item Name:{data.itemName}");
-        saveData.AppendLine($"Current Durability:{currentDurability}");
-        saveData.AppendLine($"Quantity:{quantity}");
-        saveData.AppendLine($"Loaded Ammo:({loadedAmmoTypes[0]}, {loadedAmmoTypes[1]})");
-
-        return saveData.ToString();
-    }
-
 } 

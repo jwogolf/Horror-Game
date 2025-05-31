@@ -4,7 +4,7 @@ public class Revolver : MonoBehaviour, ToolBehavior
 {
     // Damage
     [SerializeField] private LayerMask hitMask; // can probably remove unless only want to hit certain layers
-    private float fireRange = 500f;
+    private float fireRange = 500f; // max bullet distance
     private float damage = 50f;
 
     // Reloading
@@ -18,7 +18,7 @@ public class Revolver : MonoBehaviour, ToolBehavior
     // Aiming
     private Camera playerCamera;
     private float defaultFOV;
-    private float zoomFOV = 40f;
+    private float zoomFOV = 40f; // how much to zoom in
     private bool isAiming = false;
 
     public void SetInstance(ItemInstance itemInstance)

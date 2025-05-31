@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
@@ -28,25 +29,24 @@ public class PuzzleRequirement
     public bool oneTimeRequirement = false;
     public bool requirementSatisfied = false;
 
-    public string ToSaveString()
+    public PuzzleRequirement(
+    PuzzleRequirementType? t = null,
+    Vector3? location = null,
+    float r = 20f,
+    string reqItem = null,
+    MultiMeter.ScanMode? mode = null,
+    float? lowT = null,
+    float? highT = null,
+    bool oneTime = false,
+    bool satisfied = false)
     {
-        StringBuilder saveData = new StringBuilder();
-
-        saveData.AppendLine($"Requirement Type:{type}");
-        saveData.AppendLine($"Target Location:{vectorToString(targetLocation)}");
-        saveData.AppendLine($"Radius:{radius}");
-        saveData.AppendLine($"Required Scan Mode:{requiredScanMode}");
-        saveData.AppendLine($"Required Item ID:{requiredItemId}");
-        saveData.AppendLine($"Low Threshold:{lowThresh}");
-        saveData.AppendLine($"High Threshold:{highThresh}");
-        saveData.AppendLine($"One Time Requirement:{oneTimeRequirement}");
-        saveData.AppendLine($"Requirement Satisfied:{requirementSatisfied}");
-
-        return saveData.ToString();
-    }
-
-    private string vectorToString(Vector3 v)
-    {
-        return $"{v.x:F3},{v.y:F3},{v.z:F3}";
+        this.type = t ?? default;
+        this.targetLocation = location ?? Vector3.zero;
+        this.requiredItemId = reqItem;
+        this.requiredScanMode = mode ?? default;
+        this.lowThresh = lowT ?? float.MinValue;
+        this.highThresh = highT ?? float.MaxValue;
+        this.oneTimeRequirement = oneTime;
+        this.requirementSatisfied = satisfied;
     }
 }

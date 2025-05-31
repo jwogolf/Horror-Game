@@ -2162,6 +2162,7 @@ GameObject:
   - component: {fileID: 1739885857}
   - component: {fileID: 1739885860}
   - component: {fileID: 1739885862}
+  - component: {fileID: 1739885864}
   - component: {fileID: 1739885859}
   - component: {fileID: 1739885853}
   - component: {fileID: 1739885854}
@@ -2492,6 +2493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7927cb3b91e1b4384bbba53434ed15bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  save: {fileID: 1739885864}
   toolHoldPoint: {fileID: 589991232}
   inventory: {fileID: 1739885858}
   crosshairDot: {fileID: 1546348501}
@@ -2509,6 +2511,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notebook: {fileID: 1739885863}
+  playerMultimeter: {fileID: 1739885856}
+  inventory: {fileID: 1739885858}
+  player: {fileID: 1739885850}
   allPuzzles: []
   allArcs: []
 --- !u!114 &1739885863
@@ -2523,6 +2528,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60e0f8dffc40c45e8bf0d812980fe593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1739885864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739885849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f487ffa7058814adca950487f1898b23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1739885850}
+  time: {fileID: 1739885860}
+  playerPrefab: {fileID: 1739885849}
+  saveFileName: gamesave.txt
 --- !u!1 &1813355206
 GameObject:
   m_ObjectHideFlags: 0

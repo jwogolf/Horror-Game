@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class Flashlight : MonoBehaviour, ToolBehavior
 {
-    [SerializeField] Light flashlight; // Assign in inspector
-    private float crankAmount = 2f;
+    [SerializeField] Light flashlight; // Assign in inspector, ligth source
+    private float crankAmount = 2f; // seconds of light per crank
     private float drainRate = 1f; // durability lost per second when on
-    private float fadeDuration = 3f;
-    private float maxIntensity = 500f;
+    private float fadeDuration = 3f; // how long the fade out lasts when flashlight is dying
+    private float maxIntensity = 500f; // light intensity
 
     private ItemInstance instance;
     private bool isOn = false;
@@ -42,7 +42,7 @@ public class Flashlight : MonoBehaviour, ToolBehavior
 
             float currentDurability = instance.GetCurrentDurability();
 
-            // Start fading when durability is in last 3 seconds
+            // Start fading when durability is in last few seconds
             if (currentDurability <= fadeDuration)
             {
                 float fadePercent = Mathf.Clamp01(currentDurability / fadeDuration);
@@ -55,7 +55,7 @@ public class Flashlight : MonoBehaviour, ToolBehavior
             }
         }
 
-        /*
+        /* 
         if (!isOn && instance != null) {
             // make flashlight lose battery slowly while off
             instance.Use((drainRate / 10f) * Time.deltaTime);

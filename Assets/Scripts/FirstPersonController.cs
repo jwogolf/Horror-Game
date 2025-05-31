@@ -217,6 +217,16 @@ public class FirstPersonController : MonoBehaviour
         return currentStamina;
     }
 
+    public void setHealth(float saved)
+    {
+        currentHealth = saved;
+    }
+
+    public void setStamina(float saved)
+    {
+        currentStamina = saved;
+    }
+
     public void TakeDamage(float amount)
     {
         // ADD VISUAL CUE
@@ -251,12 +261,22 @@ public class FirstPersonController : MonoBehaviour
     {
         return confidence;
     }
+    
+    public void setDelirium(float saved)
+    {
+        delirium = saved;
+    }
+
+    public void setConfidence(float saved)
+    {
+        confidence = saved;
+    }
 
 
     // HANDLE THE CONSEQUENCES OF DIFFERENT CONFIDENCE AND DELIRIUM LEVELS HERE
 
 
-    void PickUp()
+void PickUp()
     {
         // ADD NAME OF THE ITEM HOVERING OVER THE ITEM
         Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
