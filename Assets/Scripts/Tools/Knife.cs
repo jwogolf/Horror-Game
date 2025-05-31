@@ -11,7 +11,7 @@ public class Knife : MonoBehaviour, ToolBehavior
 
     private float lastAttackTime = 0f;
 
-    public void mainAction() 
+    public void mainAction()
     {
         PerformAttack();
     }

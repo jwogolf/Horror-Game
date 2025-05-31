@@ -46,20 +46,23 @@ public class ToolManager : MonoBehaviour
         thirdUseAction = playerMap.FindAction("Reload");
         fourthUseAction = playerMap.FindAction("Right");
 
-        onMainUse = ctx => {
+        onMainUse = ctx =>
+        {
             //UseTool(currentToolInstance.data.usageRate);
             currentToolBehavior?.mainAction();
         };
 
         onSecondUseStart = ctx => currentToolBehavior?.secondAction();
-        onSecondUseCancel = ctx => {
+        onSecondUseCancel = ctx =>
+        {
             if (currentToolBehavior is Revolver revolver || currentToolBehavior is Shotgun shotgun)
                 currentToolBehavior.StopAiming();
         };
 
         onThirdUse = ctx => currentToolBehavior?.thirdAction();
 
-        onFourthUse = ctx => {
+        onFourthUse = ctx =>
+        {
             if (!inventoryUI.IsOpen())
                 currentToolBehavior?.fourthAction();
         };

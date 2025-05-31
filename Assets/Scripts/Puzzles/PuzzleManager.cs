@@ -184,5 +184,5 @@ public class PuzzleManager : MonoBehaviour
 
         allPuzzles.Add(testPuzzle);
         puzzleLookup[testPuzzle.id] = testPuzzle;
-}
+    }
 }
