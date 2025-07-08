@@ -4,30 +4,66 @@ using System.Collections;
 
 public class TimeManager : MonoBehaviour
 {
-    [SerializeField] Texture2D dawnSkybox;
-    [SerializeField] Texture2D daySkybox;
-    [SerializeField] Texture2D duskSkybox;
-    [SerializeField] Texture2D nightSkybox;
+    // sky color
+    [SerializeField] Color dawnSkybox;
+    [SerializeField] Color daySkybox;
+    [SerializeField] Color duskSkybox;
+    [SerializeField] Color nightSkybox;
 
+    // horizon color
+    [SerializeField] Color dawnHorizon;
+    [SerializeField] Color dayHorizon;
+    [SerializeField] Color duskHorizon;
+    [SerializeField] Color nightHorizon;
+
+    // sun reference
     [SerializeField] Light mainLight;
+    [SerializeField] GameObject mainLightObj;
 
-    [SerializeField] Gradient nightDawn;
-    [SerializeField] Gradient dawnDay;
-    [SerializeField] Gradient dayDusk;
-    [SerializeField] Gradient duskNight;
+    // sunlight color
+    [SerializeField] Color dawnColor;
+    [SerializeField] Color dayColor;
+    [SerializeField] Color duskColor;
+    [SerializeField] Color nightColor;
 
-    private float nightLight = 0.1f;
-    private float dawnLight = 1.0f;
+    // built-in long distance "blue ridge" fog color
+    [SerializeField] private Color nightFog;
+    [SerializeField] private Color dawnFog;
+    [SerializeField] private Color dayFog;
+    [SerializeField] private Color duskFog;
+
+    // horizon blend (lower is bigger horizon)
+    private float dawnHorizonBlend = 3.0f;
+    private float dayHorizonBlend = 10.0f;
+    private float duskHorizonBlend = 2.0f;
+    private float nightHorizonBlend = 6.0f;
+
+    // sun light intensity
+    private float nightLight = 0.05f;
+    private float dawnLight = 1.5f;
     private float dayLight = 1.5f;
-    private float duskLight = 0.7f;
+    private float duskLight = 1.0f;
 
-    private float nightAmbient = 0.05f;
+    // sun ambient light
+    private float nightAmbient = 0.5f;
     private float dawnAmbient = 1.5f;
-    private float dayAmbient = 1.0f;
-    private float duskAmbient = 1.5f;
+    private float dayAmbient = 1.5f;
+    private float duskAmbient = 1.0f;
 
+    // skybox exposure
+    private float nightExposure = 0.5f;
+    private float dawnExposure = 1.5f;
+    private float dayExposure = 2.0f;
+    private float duskExposure = 1.25f;
+
+    // star brightness
+    private float dayStars = 0.0f;
+    private float nightStars = 0.4f;
+
+    // transition time between phases
     private float transitionPeriod = 60f;
 
+    // hour each phase begins
     private int dawnStart = 7;
     private int dayStart = 8;
     private int duskStart = 18;
@@ -57,8 +93,8 @@ public class TimeManager : MonoBehaviour
 
     private Quaternion defaultSunRotation;
     // Time when sun is in default position
-    private int stdSunPosHour = 11;
-    private int stdSunPosMinute = 0;
+    private int stdSunPosHour = 10;
+    private int stdSunPosMinute = 37;
 
     // for loading time
     public bool suppressHourTransition = false;
@@ -70,10 +106,10 @@ public class TimeManager : MonoBehaviour
     {
         RenderSettings.sun = mainLight;
 
-        defaultSunRotation = mainLight.transform.rotation;
+        defaultSunRotation = mainLightObj.transform.rotation;
 
         minute = 50;
-        hour = 7;
+        hour = 6;
         day = 0;
 
         updateSky(hour, minute);
@@ -84,7 +120,7 @@ public class TimeManager : MonoBehaviour
     {
         tempSeconds += Time.deltaTime;
 
-        mainLight.transform.Rotate(Vector3.forward, (1f / 1440f) * 360f * Time.deltaTime, Space.World);
+        mainLightObj.transform.Rotate(Vector3.forward, (1f / 1440f) * 360f * Time.deltaTime, Space.World);
 
         if (tempSeconds >= 1) {
             Minutes += 1;
@@ -105,48 +141,90 @@ public class TimeManager : MonoBehaviour
     }
 
     private void OnHourChange(int value) {
-        if (hour == dawnStart){
+        if (hour == dawnStart)
+        {
             StartCoroutine(LerpSkybox(nightSkybox, dawnSkybox, transitionPeriod));
-            StartCoroutine(LerpLight(nightDawn, transitionPeriod));
+            StartCoroutine(LerpLight(nightColor, dawnColor, transitionPeriod));
             StartCoroutine(LerpBrightness(nightLight, dawnLight, nightAmbient, dawnAmbient, transitionPeriod));
+            StartCoroutine(LerpFog(nightFog, dawnFog, transitionPeriod));
+            StartCoroutine(LerpExposure(nightExposure, dawnExposure, transitionPeriod));
+            StartCoroutine(LerpHorizon(nightHorizon, dawnHorizon, nightHorizonBlend, dawnHorizonBlend, transitionPeriod));
+            StartCoroutine(LerpStars(nightStars, dayStars, transitionPeriod / 2f));
         }
-        else if (hour == dayStart) {
+        else if (hour == dayStart)
+        {
             StartCoroutine(LerpSkybox(dawnSkybox, daySkybox, transitionPeriod / 3f));
-            StartCoroutine(LerpLight(dawnDay, transitionPeriod / 3f));
+            StartCoroutine(LerpLight(dawnColor, dayColor, transitionPeriod / 3f));
             StartCoroutine(LerpBrightness(dawnLight, dayLight, dawnAmbient, dayAmbient, transitionPeriod / 3f));
+            StartCoroutine(LerpFog(dawnFog, dayFog, transitionPeriod / 3f));
+            StartCoroutine(LerpExposure(dawnExposure, dayExposure, transitionPeriod / 3f));
+            StartCoroutine(LerpHorizon(dawnHorizon, dayHorizon, dawnHorizonBlend, dayHorizonBlend, transitionPeriod / 3f));
         }
-        else if (hour == duskStart) {
+        else if (hour == duskStart)
+        {
             StartCoroutine(LerpSkybox(daySkybox, duskSkybox, transitionPeriod));
-            StartCoroutine(LerpLight(dayDusk, transitionPeriod));
+            StartCoroutine(LerpLight(dayColor, duskColor, transitionPeriod));
             StartCoroutine(LerpBrightness(dayLight, duskLight, dayAmbient, duskAmbient, transitionPeriod));
+            StartCoroutine(LerpFog(dayFog, duskFog, transitionPeriod));
+            StartCoroutine(LerpExposure(dayExposure, duskExposure, transitionPeriod));
+            StartCoroutine(LerpHorizon(dayHorizon, duskHorizon, dayHorizonBlend, duskHorizonBlend, transitionPeriod));
         }
-        else if (hour == nightStart) {
+        else if (hour == nightStart)
+        {
             StartCoroutine(LerpSkybox(duskSkybox, nightSkybox, transitionPeriod / 3f));
-            StartCoroutine(LerpLight(duskNight, transitionPeriod / 3f));
+            StartCoroutine(LerpLight(duskColor, nightColor, transitionPeriod / 3f));
             StartCoroutine(LerpBrightness(duskLight, nightLight, duskAmbient, nightAmbient, transitionPeriod / 3f));
+            StartCoroutine(LerpFog(duskFog, nightFog, transitionPeriod / 3f));
+            StartCoroutine(LerpExposure(duskExposure, nightExposure, transitionPeriod / 3f));
+            StartCoroutine(LerpHorizon(duskHorizon, nightHorizon, duskHorizonBlend, nightHorizonBlend, transitionPeriod / 3f));
+            StartCoroutine(LerpStars(dayStars, nightStars, transitionPeriod / 3f));
         }
     }
 
     private void OnDayChange(int value) {
         // maybe dont need maybe do
     }
+    
+    private IEnumerator LerpSkybox(Color a, Color b, float time)
+    {
+        var grad = new Gradient();
 
-    private IEnumerator LerpSkybox(Texture2D a, Texture2D b, float time) {
-        RenderSettings.skybox.SetTexture("_Texture1", a);
-        RenderSettings.skybox.SetTexture("_Texture2", b);
-        RenderSettings.skybox.SetFloat("_Blend", 0);
+        // Blend color from red at 0% to blue at 100%
+        var colors = new GradientColorKey[2];
+        colors[0] = new GradientColorKey(a, 0.0f);
+        colors[1] = new GradientColorKey(b, 1.0f);
 
-        for (float i = 0; i < time; i += Time.deltaTime) {
-            RenderSettings.skybox.SetFloat("_Blend", i / time);
+        // Blend alpha from opaque at 0% to transparent at 100%
+        var alphas = new GradientAlphaKey[2];
+        alphas[0] = new GradientAlphaKey(1.0f, 1.0f);
+        alphas[1] = new GradientAlphaKey(1.0f, 1.0f);
+
+        grad.SetKeys(colors, alphas);
+
+        for (float i = 0; i < time; i += Time.deltaTime)
+        {
+            RenderSettings.skybox.SetColor("_SkyColor", grad.Evaluate(i / time));
             yield return null;
         }
-
-        RenderSettings.skybox.SetTexture("_Texture1", b);
     }
 
-    private IEnumerator LerpLight(Gradient lightGradient, float time) {
-        for (float i = 0; i < time; i += Time.deltaTime) {
-            mainLight.color = lightGradient.Evaluate(i / time);
+    private IEnumerator LerpLight(Color a, Color b, float time)
+    {
+        var grad = new Gradient();
+
+        // Blend color from red at 0% to blue at 100%
+        var colors = new GradientColorKey[2];
+        colors[0] = new GradientColorKey(a, 0.0f);
+        colors[1] = new GradientColorKey(b, 1.0f);
+
+        // Blend alpha from opaque at 0% to transparent at 100%
+        var alphas = new GradientAlphaKey[2];
+        alphas[0] = new GradientAlphaKey(1.0f, 1.0f);
+        alphas[1] = new GradientAlphaKey(1.0f, 1.0f);
+
+        for (float i = 0; i < time; i += Time.deltaTime)
+        {
+            mainLight.color = grad.Evaluate(i / time);
             yield return null;
         }
     }
@@ -160,64 +238,127 @@ public class TimeManager : MonoBehaviour
             yield return null;
         }
     }
+    
+    private IEnumerator LerpFog(Color startColor, Color endColor, float time)
+    {
+        for (float i = 0; i < time; i += Time.deltaTime)
+        {
+            RenderSettings.fogColor = Color.Lerp(startColor, endColor, i / time);
+            yield return null;
+        }
 
-    public void updateSky(int hour, int minute) {
+        RenderSettings.fogColor = endColor;
+    }
+
+    private IEnumerator LerpExposure(float start, float end, float time)
+    {
+        float expDiff = end - start;
+        for (float i = 0; i < time; i += Time.deltaTime)
+        {
+            RenderSettings.skybox.SetFloat("_SkyExposure", start + (expDiff * (i / time)));
+            yield return null;
+        }
+    }
+
+    private IEnumerator LerpHorizon(Color a, Color b, float start, float end, float time)
+    {
+        var grad = new Gradient();
+
+        // Blend color from red at 0% to blue at 100%
+        var colors = new GradientColorKey[2];
+        colors[0] = new GradientColorKey(a, 0.0f);
+        colors[1] = new GradientColorKey(b, 1.0f);
+
+        // Blend alpha from opaque at 0% to transparent at 100%
+        var alphas = new GradientAlphaKey[2];
+        alphas[0] = new GradientAlphaKey(1.0f, 1.0f);
+        alphas[1] = new GradientAlphaKey(1.0f, 1.0f);
+
+        grad.SetKeys(colors, alphas);
+
+        float diff = end - start;
+
+        for (float i = 0; i < time; i += Time.deltaTime)
+        {
+            RenderSettings.skybox.SetColor("_HorizonColor", grad.Evaluate(i / time));
+            RenderSettings.skybox.SetFloat("_HorizonBlend", start + (diff * (i / time)));
+            yield return null;
+        }
+    }
+
+    private IEnumerator LerpStars(float start, float end, float time)
+    {
+        float diff = end - start;
+        for (float i = 0; i < time; i += Time.deltaTime)
+        {
+            RenderSettings.skybox.SetFloat("_StarVisibility", start + (diff * (i / time)));
+            yield return null;
+        }
+    }
+
+    public void updateSky(int hour, int minute)
+    {
         int minuteDiff = ((hour - stdSunPosHour) * 60) + (minute - stdSunPosMinute);
 
-        mainLight.transform.rotation = defaultSunRotation;
+        mainLightObj.transform.rotation = defaultSunRotation;
 
         float minutesPerDay = 1440f;
         float anglePerMinute = 360f / minutesPerDay;
         float rotationAmount = minuteDiff * anglePerMinute;
 
-        mainLight.transform.Rotate(Vector3.forward, rotationAmount, Space.World);
+        mainLightObj.transform.Rotate(Vector3.forward, rotationAmount, Space.World);
 
         // night
-        if (hour < dawnStart || hour > nightStart) {
-            RenderSettings.skybox.SetTexture("_Texture1", nightSkybox);
-            RenderSettings.skybox.SetTexture("_Texture2", dawnSkybox);
-            RenderSettings.skybox.SetFloat("_Blend", 0);
+        if (hour < dawnStart || hour > nightStart)
+        {
             mainLight.intensity = nightLight;
-            RenderSettings.skybox.SetColor("_TintColor1", nightDawn.Evaluate(0f));
-            RenderSettings.skybox.SetColor("_TintColor2", nightDawn.Evaluate(1f));
-            mainLight.color = nightDawn.Evaluate(0f);
+            mainLight.color = nightColor;
             RenderSettings.ambientIntensity = nightAmbient;
+            RenderSettings.fogColor = nightFog;
+            RenderSettings.skybox.SetFloat("_SkyExposure", nightExposure);
+            RenderSettings.skybox.SetColor("_SkyColor", nightSkybox);
+            RenderSettings.skybox.SetColor("_HorizonColor", nightHorizon);
+            RenderSettings.skybox.SetFloat("_HorizonBlend", nightHorizonBlend);
+            RenderSettings.skybox.SetFloat("_StarVisibility", nightStars);
         }
         // dawn
         else if (hour < dayStart)
         {
-            RenderSettings.skybox.SetTexture("_Texture1", dawnSkybox);
-            RenderSettings.skybox.SetTexture("_Texture2", daySkybox);
-            RenderSettings.skybox.SetFloat("_Blend", 0);
             mainLight.intensity = dawnLight;
-            RenderSettings.skybox.SetColor("_TintColor1", dawnDay.Evaluate(0f));
-            RenderSettings.skybox.SetColor("_TintColor2", dawnDay.Evaluate(1f));
-            mainLight.color = dawnDay.Evaluate(0f);
+            mainLight.color = dawnColor;
             RenderSettings.ambientIntensity = dawnAmbient;
+            RenderSettings.fogColor = dawnFog;
+            RenderSettings.skybox.SetFloat("_SkyExposure", dawnExposure);
+            RenderSettings.skybox.SetColor("_SkyColor", dawnSkybox);
+            RenderSettings.skybox.SetColor("_HorizonColor", dawnHorizon);
+            RenderSettings.skybox.SetFloat("_HorizonBlend", dawnHorizonBlend);
+            RenderSettings.skybox.SetFloat("_StarVisibility", dayStars);
         }
         // day
         else if (hour < duskStart)
         {
-            RenderSettings.skybox.SetTexture("_Texture1", daySkybox);
-            RenderSettings.skybox.SetTexture("_Texture2", duskSkybox);
-            RenderSettings.skybox.SetFloat("_Blend", 0);
             mainLight.intensity = dayLight;
-            RenderSettings.skybox.SetColor("_TintColor1", dayDusk.Evaluate(0f));
-            RenderSettings.skybox.SetColor("_TintColor2", dayDusk.Evaluate(1f));
-            mainLight.color = dayDusk.Evaluate(0f);
+            mainLight.color = dayColor;
             RenderSettings.ambientIntensity = dayAmbient;
+            RenderSettings.fogColor = dayFog;
+            RenderSettings.skybox.SetFloat("_SkyExposure", dayExposure);
+            RenderSettings.skybox.SetColor("_SkyColor", daySkybox);
+            RenderSettings.skybox.SetColor("_HorizonColor", dayHorizon);
+            RenderSettings.skybox.SetFloat("_HorizonBlend", dayHorizonBlend);
+            RenderSettings.skybox.SetFloat("_StarVisibility", dayStars);
         }
         // dusk
         else if (hour < nightStart)
         {
-            RenderSettings.skybox.SetTexture("_Texture1", duskSkybox);
-            RenderSettings.skybox.SetTexture("_Texture2", nightSkybox);
-            RenderSettings.skybox.SetFloat("_Blend", 0);
             mainLight.intensity = duskLight;
-            RenderSettings.skybox.SetColor("_TintColor1", duskNight.Evaluate(0f));
-            RenderSettings.skybox.SetColor("_TintColor2", duskNight.Evaluate(1f));
-            mainLight.color = duskNight.Evaluate(0f);
+            mainLight.color = duskColor;
             RenderSettings.ambientIntensity = duskAmbient;
+            RenderSettings.fogColor = duskFog;
+            RenderSettings.skybox.SetFloat("_SkyExposure", duskExposure);
+            RenderSettings.skybox.SetColor("_SkyColor", duskSkybox);
+            RenderSettings.skybox.SetColor("_HorizonColor", duskHorizon);
+            RenderSettings.skybox.SetFloat("_HorizonBlend", duskHorizonBlend);
+            RenderSettings.skybox.SetFloat("_StarVisibility", dayStars);
         }
     }
 }

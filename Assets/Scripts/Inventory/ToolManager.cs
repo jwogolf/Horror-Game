@@ -130,7 +130,7 @@ public class ToolManager : MonoBehaviour
         currentToolInstance = tools[toolIndex];
         Equip(currentToolInstance);
         Debug.Log(currentToolInstance.data.itemName);
-        save.LoadGame(); // CHANGE THIS TO TEST SAVE/LOAD
+        //save.LoadGame(); // CHANGE THIS TO TEST SAVE/LOAD
     }
 
     public void Equip(ItemInstance instance)

@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &3136210776514112851
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      propertyPath: m_Name
+      value: tulip_poplar_1 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6618570340647223891}
+  m_SourcePrefab: {fileID: 100100000, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+--- !u!1 &2830343884417863682 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+  m_PrefabInstance: {fileID: 3136210776514112851}
+  m_PrefabAsset: {fileID: 0}
+--- !u!205 &-6618570340647223891
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2830343884417863682}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.024120625
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 7113232789235503381, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: -7918335002988649766, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: 882129737928793925, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: 7339356831882890532, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: 2786534777698132407, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: -7023974396876390944, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: -241587437493983680, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: -9003323146575883303, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: -2268138116939433651, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: 8443713291819645580, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: 5670784105149147771, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: -2090608591832345471, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: 3699295531117829134, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: 2334830646326187502, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: -6821315975633821789, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: 7293059144023096718, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: 2508812124418183303, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+    - renderer: {fileID: 3615449878971091806, guid: 0c5e1871d49f94ec3b3d87f51d0123e5, type: 3}
+  - screenRelativeHeight: 0.00024946535
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 6332018205762730589, guid: 9ceef2cd1b775444cbf9aae25a83a3bc, type: 3}
+    - renderer: {fileID: 2694266922070115846, guid: 554750db73dd24943a52be532b6f3c03, type: 3}
+  m_Enabled: 1

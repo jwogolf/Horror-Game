@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1402164069578905591
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      propertyPath: m_Name
+      value: tulip_poplar_2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3149267506739654672}
+  m_SourcePrefab: {fileID: 100100000, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+--- !u!1 &2284474117499136678 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+  m_PrefabInstance: {fileID: 1402164069578905591}
+  m_PrefabAsset: {fileID: 0}
+--- !u!205 &3149267506739654672
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2284474117499136678}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.017144948
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 3615449878971091806, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+    - renderer: {fileID: 7113232789235503381, guid: 3e90619485c79467e8c434daefcba1d4, type: 3}
+  - screenRelativeHeight: 0.0065269484
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: -4587302668392987624, guid: cf5ebeafb5e6e4e569d5eafa5e2e0beb, type: 3}
+    - renderer: {fileID: 7202271454713460447, guid: cf5ebeafb5e6e4e569d5eafa5e2e0beb, type: 3}
+  - screenRelativeHeight: 0.0016
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 3305732057381051673, guid: e82924ba3ab704beda1bf1253f9972e7, type: 3}
+    - renderer: {fileID: 6264504698037865236, guid: af8b2bdbf3d05496eb06d1523a3c228f, type: 3}
+  m_Enabled: 1
