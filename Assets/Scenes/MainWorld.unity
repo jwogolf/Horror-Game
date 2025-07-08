@@ -2131,13 +2131,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dawnSkybox: {r: 0.43867922, g: 0.86635214, b: 1, a: 1}
-  daySkybox: {r: 0.2028302, g: 0.7435177, b: 1, a: 1}
-  duskSkybox: {r: 0.49056602, g: 0.12071279, b: 0.071733706, a: 1}
+  daySkybox: {r: 0.23113209, g: 0.69678444, b: 1, a: 1}
+  duskSkybox: {r: 0.5660378, g: 0.30170882, b: 0.4128752, a: 1}
   nightSkybox: {r: 0.14901961, g: 0.11372549, b: 0.22745098, a: 1}
-  dawnHorizon: {r: 1, g: 0.8984799, b: 0.5518868, a: 0}
-  dayHorizon: {r: 0.1462264, g: 0.5230066, b: 1, a: 0}
-  duskHorizon: {r: 0.98220116, g: 0.36320752, b: 1, a: 0}
-  nightHorizon: {r: 0.21026166, g: 0.4245283, b: 0.2436578, a: 0}
+  dawnHorizon: {r: 0.990566, g: 0.8488341, b: 0.36912602, a: 0}
+  dayHorizon: {r: 0.3160377, g: 0.6166327, b: 1, a: 0}
+  duskHorizon: {r: 0.8396226, g: 0.42336977, b: 0.13861692, a: 0}
+  nightHorizon: {r: 0.13568656, g: 0.1792453, b: 0.08877715, a: 0}
   mainLight: {fileID: 1798852374}
   mainLightObj: {fileID: 1798852372}
   dawnColor: {r: 1, g: 0.92360777, b: 0.4198113, a: 1}
