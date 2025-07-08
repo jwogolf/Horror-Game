@@ -32,6 +32,13 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private Color dayFog;
     [SerializeField] private Color duskFog;
 
+    // localized grey fog
+    [SerializeField] Material fog;
+    [SerializeField] private Color nightGreyFog;
+    [SerializeField] private Color dawnGreyFog;
+    [SerializeField] private Color dayGreyFog;
+    [SerializeField] private Color duskGreyFog;
+
     // horizon blend (lower is bigger horizon)
     private float dawnHorizonBlend = 3.0f;
     private float dayHorizonBlend = 10.0f;
@@ -45,7 +52,7 @@ public class TimeManager : MonoBehaviour
     private float duskLight = 1.0f;
 
     // sun ambient light
-    private float nightAmbient = 0.5f;
+    private float nightAmbient = 0.6f;
     private float dawnAmbient = 1.5f;
     private float dayAmbient = 1.5f;
     private float duskAmbient = 1.0f;
@@ -109,7 +116,7 @@ public class TimeManager : MonoBehaviour
         defaultSunRotation = mainLightObj.transform.rotation;
 
         minute = 50;
-        hour = 6;
+        hour = 20;
         day = 0;
 
         updateSky(hour, minute);
@@ -150,6 +157,7 @@ public class TimeManager : MonoBehaviour
             StartCoroutine(LerpExposure(nightExposure, dawnExposure, transitionPeriod));
             StartCoroutine(LerpHorizon(nightHorizon, dawnHorizon, nightHorizonBlend, dawnHorizonBlend, transitionPeriod));
             StartCoroutine(LerpStars(nightStars, dayStars, transitionPeriod / 2f));
+            StartCoroutine(LerpGreyFog(nightGreyFog, dawnGreyFog, transitionPeriod));
         }
         else if (hour == dayStart)
         {
@@ -159,6 +167,7 @@ public class TimeManager : MonoBehaviour
             StartCoroutine(LerpFog(dawnFog, dayFog, transitionPeriod / 3f));
             StartCoroutine(LerpExposure(dawnExposure, dayExposure, transitionPeriod / 3f));
             StartCoroutine(LerpHorizon(dawnHorizon, dayHorizon, dawnHorizonBlend, dayHorizonBlend, transitionPeriod / 3f));
+            StartCoroutine(LerpGreyFog(dawnGreyFog, dayGreyFog, transitionPeriod / 3f));
         }
         else if (hour == duskStart)
         {
@@ -168,6 +177,7 @@ public class TimeManager : MonoBehaviour
             StartCoroutine(LerpFog(dayFog, duskFog, transitionPeriod));
             StartCoroutine(LerpExposure(dayExposure, duskExposure, transitionPeriod));
             StartCoroutine(LerpHorizon(dayHorizon, duskHorizon, dayHorizonBlend, duskHorizonBlend, transitionPeriod));
+            StartCoroutine(LerpGreyFog(dayGreyFog, duskGreyFog, transitionPeriod));
         }
         else if (hour == nightStart)
         {
@@ -178,65 +188,49 @@ public class TimeManager : MonoBehaviour
             StartCoroutine(LerpExposure(duskExposure, nightExposure, transitionPeriod / 3f));
             StartCoroutine(LerpHorizon(duskHorizon, nightHorizon, duskHorizonBlend, nightHorizonBlend, transitionPeriod / 3f));
             StartCoroutine(LerpStars(dayStars, nightStars, transitionPeriod / 3f));
+            StartCoroutine(LerpGreyFog(duskGreyFog, nightGreyFog, transitionPeriod / 3f));
         }
     }
 
     private void OnDayChange(int value) {
         // maybe dont need maybe do
     }
-    
+
     private IEnumerator LerpSkybox(Color a, Color b, float time)
     {
-        var grad = new Gradient();
-
-        // Blend color from red at 0% to blue at 100%
-        var colors = new GradientColorKey[2];
-        colors[0] = new GradientColorKey(a, 0.0f);
-        colors[1] = new GradientColorKey(b, 1.0f);
-
-        // Blend alpha from opaque at 0% to transparent at 100%
-        var alphas = new GradientAlphaKey[2];
-        alphas[0] = new GradientAlphaKey(1.0f, 1.0f);
-        alphas[1] = new GradientAlphaKey(1.0f, 1.0f);
-
-        grad.SetKeys(colors, alphas);
-
         for (float i = 0; i < time; i += Time.deltaTime)
         {
-            RenderSettings.skybox.SetColor("_SkyColor", grad.Evaluate(i / time));
+            RenderSettings.skybox.SetColor("_SkyColor", Color.Lerp(a, b, i / time));
             yield return null;
         }
+        
+        RenderSettings.skybox.SetColor("_SkyColor", b);
     }
 
     private IEnumerator LerpLight(Color a, Color b, float time)
     {
-        var grad = new Gradient();
-
-        // Blend color from red at 0% to blue at 100%
-        var colors = new GradientColorKey[2];
-        colors[0] = new GradientColorKey(a, 0.0f);
-        colors[1] = new GradientColorKey(b, 1.0f);
-
-        // Blend alpha from opaque at 0% to transparent at 100%
-        var alphas = new GradientAlphaKey[2];
-        alphas[0] = new GradientAlphaKey(1.0f, 1.0f);
-        alphas[1] = new GradientAlphaKey(1.0f, 1.0f);
-
         for (float i = 0; i < time; i += Time.deltaTime)
         {
-            mainLight.color = grad.Evaluate(i / time);
+            mainLight.color = Color.Lerp(a, b, i / time);
             yield return null;
         }
+
+        mainLight.color = b;
     }
 
-    private IEnumerator LerpBrightness (float startLight, float endLight, float startAmb, float endAmb, float time) {
+    private IEnumerator LerpBrightness(float startLight, float endLight, float startAmb, float endAmb, float time)
+    {
         float lightDiff = endLight - startLight;
         float ambDiff = endAmb - startAmb;
-        for (float i = 0; i < time; i += Time.deltaTime) {
+        for (float i = 0; i < time; i += Time.deltaTime)
+        {
             mainLight.intensity = startLight + (lightDiff * (i / time));
             RenderSettings.ambientIntensity = startAmb + (ambDiff * (i / time));
             yield return null;
         }
+        
+        mainLight.intensity = endLight;
+        RenderSettings.ambientIntensity = endAmb;
     }
     
     private IEnumerator LerpFog(Color startColor, Color endColor, float time)
@@ -250,6 +244,17 @@ public class TimeManager : MonoBehaviour
         RenderSettings.fogColor = endColor;
     }
 
+    private IEnumerator LerpGreyFog(Color startColor, Color endColor, float time)
+    {
+        for (float i = 0; i < time; i += Time.deltaTime)
+        {
+            fog.SetColor("_BaseColor", Color.Lerp(startColor, endColor, i / time));
+            yield return null;
+        }
+
+        fog.SetColor("_BaseColor", endColor);
+    }
+
     private IEnumerator LerpExposure(float start, float end, float time)
     {
         float expDiff = end - start;
@@ -258,32 +263,23 @@ public class TimeManager : MonoBehaviour
             RenderSettings.skybox.SetFloat("_SkyExposure", start + (expDiff * (i / time)));
             yield return null;
         }
+
+        RenderSettings.skybox.SetFloat("_SkyExposure", end);
     }
 
     private IEnumerator LerpHorizon(Color a, Color b, float start, float end, float time)
     {
-        var grad = new Gradient();
-
-        // Blend color from red at 0% to blue at 100%
-        var colors = new GradientColorKey[2];
-        colors[0] = new GradientColorKey(a, 0.0f);
-        colors[1] = new GradientColorKey(b, 1.0f);
-
-        // Blend alpha from opaque at 0% to transparent at 100%
-        var alphas = new GradientAlphaKey[2];
-        alphas[0] = new GradientAlphaKey(1.0f, 1.0f);
-        alphas[1] = new GradientAlphaKey(1.0f, 1.0f);
-
-        grad.SetKeys(colors, alphas);
-
         float diff = end - start;
 
         for (float i = 0; i < time; i += Time.deltaTime)
         {
-            RenderSettings.skybox.SetColor("_HorizonColor", grad.Evaluate(i / time));
+            RenderSettings.skybox.SetColor("_HorizonColor", Color.Lerp(a, b, i / time));
             RenderSettings.skybox.SetFloat("_HorizonBlend", start + (diff * (i / time)));
             yield return null;
         }
+
+        RenderSettings.skybox.SetColor("_HorizonColor", b);
+        RenderSettings.skybox.SetFloat("_HorizonBlend", end);
     }
 
     private IEnumerator LerpStars(float start, float end, float time)
@@ -294,6 +290,8 @@ public class TimeManager : MonoBehaviour
             RenderSettings.skybox.SetFloat("_StarVisibility", start + (diff * (i / time)));
             yield return null;
         }
+
+        RenderSettings.skybox.SetFloat("_StarVisibility", end);
     }
 
     public void updateSky(int hour, int minute)
@@ -320,6 +318,7 @@ public class TimeManager : MonoBehaviour
             RenderSettings.skybox.SetColor("_HorizonColor", nightHorizon);
             RenderSettings.skybox.SetFloat("_HorizonBlend", nightHorizonBlend);
             RenderSettings.skybox.SetFloat("_StarVisibility", nightStars);
+            fog.SetColor("_BaseColor", nightGreyFog);
         }
         // dawn
         else if (hour < dayStart)
@@ -333,6 +332,7 @@ public class TimeManager : MonoBehaviour
             RenderSettings.skybox.SetColor("_HorizonColor", dawnHorizon);
             RenderSettings.skybox.SetFloat("_HorizonBlend", dawnHorizonBlend);
             RenderSettings.skybox.SetFloat("_StarVisibility", dayStars);
+            fog.SetColor("_BaseColor", dawnGreyFog);
         }
         // day
         else if (hour < duskStart)
@@ -346,6 +346,7 @@ public class TimeManager : MonoBehaviour
             RenderSettings.skybox.SetColor("_HorizonColor", dayHorizon);
             RenderSettings.skybox.SetFloat("_HorizonBlend", dayHorizonBlend);
             RenderSettings.skybox.SetFloat("_StarVisibility", dayStars);
+            fog.SetColor("_BaseColor", dayGreyFog);
         }
         // dusk
         else if (hour < nightStart)
@@ -359,6 +360,7 @@ public class TimeManager : MonoBehaviour
             RenderSettings.skybox.SetColor("_HorizonColor", duskHorizon);
             RenderSettings.skybox.SetFloat("_HorizonBlend", duskHorizonBlend);
             RenderSettings.skybox.SetFloat("_StarVisibility", dayStars);
+            fog.SetColor("_BaseColor", duskGreyFog);
         }
     }
 }
